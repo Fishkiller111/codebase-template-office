@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: false },
+  ssr: true,
   // 开发服务器配置
   devServer: {
     port: parseInt(process.env.NUXT_PORT || '3000'), // 开发服务器端口
@@ -26,6 +27,12 @@ export default defineNuxtConfig({
   routeRules: {
     '/': { prerender: true }
   },
+   // 修复渲染器初始化问题
+  nitro: {
+    experimental: {
+      wasm: false
+    }
+  },
   // 添加页面过渡效果
   app: {
     pageTransition: { 
@@ -44,15 +51,6 @@ export default defineNuxtConfig({
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap' }
       ]
-    }
-  },
-  // 添加调试信息
-  nitro: {
-    devProxy: {
-      '/api': {
-        target: 'http://localhost:3001',
-        changeOrigin: true
-      }
     }
   }
 })

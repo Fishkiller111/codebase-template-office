@@ -4,18 +4,36 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev --host",
+    "dev": "nuxi dev --host",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:pull": "prisma db pull",
+    "db:studio": "prisma studio",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:migrate:reset": "prisma migrate reset",
+    "db:migrate:status": "prisma migrate status",
+    "db:format": "prisma format",
+    "db:validate": "prisma validate",
+    "db:seed": "prisma db seed",
+    "db:reset": "prisma migrate reset && prisma db push && prisma generate"
   },
   "dependencies": {
     "@nuxtjs/tailwindcss": "^6.12.1",
+    "@prisma/client": "^6.9.0",
     "@tailwindcss/typography": "^0.5.15",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@vueuse/core": "^11.1.0",
     "@vueuse/nuxt": "^11.1.0",
+    "bcryptjs": "^3.0.2",
+    "jsonwebtoken": "^9.0.2",
     "lucide-vue-next": "^0.446.0",
     "nuxt": "^3.13.0",
+    "prisma": "^6.9.0",
     "prismjs": "^1.29.0"
   },
   "devDependencies": {

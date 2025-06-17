@@ -30,15 +30,48 @@
         
         <!-- CTA Button - Enhanced with better debugging -->
         <div class="hidden md:block">
-          <NuxtLink 
-            to="/dashboard" 
-            class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-full font-medium hover:from-purple-700 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 glow-purple inline-block text-center no-underline"
-            @click="handleDesktopNavigation"
-            @mouseenter="handleButtonHover"
-            @mouseleave="handleButtonLeave"
-          >
-            立即开始
-          </NuxtLink>
+          <!-- 已登录状态 -->
+          <div v-if="isLoggedIn" class="flex items-center space-x-4">
+            <div class="text-gray-300 text-sm">
+              欢迎，<span class="font-semibold text-white">{{ user?.username }}</span>
+            </div>
+            <button
+              @click="handleLogout"
+              class="border border-gray-600 text-gray-300 hover:text-white hover:border-gray-500 px-6 py-2 rounded-full font-medium transition-all duration-200 transform hover:scale-105"
+            >
+              退出登录
+            </button>
+            <NuxtLink 
+              to="/dashboard" 
+              class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-full font-medium hover:from-purple-700 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 glow-purple inline-block text-center no-underline"
+              @click="handleDesktopNavigation"
+              @mouseenter="handleButtonHover"
+              @mouseleave="handleButtonLeave"
+            >
+              控制台
+            </NuxtLink>
+          </div>
+          <!-- 未登录状态 -->
+          <div v-else class="flex items-center space-x-4">
+            <!-- 登录按钮 -->
+            <NuxtLink 
+              to="/login" 
+              class="border border-gray-600 text-gray-300 hover:text-white hover:border-gray-500 px-6 py-2 rounded-full font-medium transition-all duration-200 transform hover:scale-105 inline-block text-center no-underline"
+              @click="handleLoginNavigation"
+            >
+              登录
+            </NuxtLink>
+            <!-- 立即开始按钮 -->
+            <NuxtLink 
+              to="/dashboard" 
+              class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-full font-medium hover:from-purple-700 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 glow-purple inline-block text-center no-underline"
+              @click="handleDesktopNavigation"
+              @mouseenter="handleButtonHover"
+              @mouseleave="handleButtonLeave"
+            >
+              立即开始
+            </NuxtLink>
+          </div>
         </div>
         
         <!-- Mobile menu button -->
@@ -79,13 +112,45 @@
           >
             {{ item.name }}
           </a>
-          <NuxtLink 
-            to="/dashboard" 
-            class="w-full mt-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-full font-medium text-center block no-underline hover:from-purple-700 hover:to-blue-700 transition-all duration-200"
-            @click="handleMobileNavigation"
-          >
-            立即开始
-          </NuxtLink>
+          <!-- 移动端按钮组 -->
+          <div class="flex flex-col space-y-3 mt-4">
+            <!-- 已登录状态 -->
+            <div v-if="isLoggedIn" class="space-y-3">
+              <div class="text-center text-gray-300 text-sm py-2">
+                欢迎，<span class="font-semibold text-white">{{ user?.username }}</span>
+              </div>
+              <button
+                @click="handleMobileLogout"
+                class="border border-gray-600 text-gray-300 hover:text-white hover:border-gray-500 px-6 py-2 rounded-full font-medium text-center block w-full transition-all duration-200"
+              >
+                退出登录
+              </button>
+              <NuxtLink 
+                to="/dashboard" 
+                class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-full font-medium text-center block no-underline hover:from-purple-700 hover:to-blue-700 transition-all duration-200"
+                @click="handleMobileNavigation"
+              >
+                控制台
+              </NuxtLink>
+            </div>
+            <!-- 未登录状态 -->
+            <div v-else class="space-y-3">
+              <NuxtLink 
+                to="/login" 
+                class="border border-gray-600 text-gray-300 hover:text-white hover:border-gray-500 px-6 py-2 rounded-full font-medium text-center block no-underline transition-all duration-200"
+                @click="handleMobileLoginNavigation"
+              >
+                登录
+              </NuxtLink>
+              <NuxtLink 
+                to="/dashboard" 
+                class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-full font-medium text-center block no-underline hover:from-purple-700 hover:to-blue-700 transition-all duration-200"
+                @click="handleMobileNavigation"
+              >
+                立即开始
+              </NuxtLink>
+            </div>
+          </div>
         </div>
       </div>
     </Transition>
@@ -146,6 +211,28 @@ const handleButtonHover = () => {
 
 const handleButtonLeave = () => {
   console.log('🎯 Get Start button unhovered')
+}
+
+const handleLoginNavigation = () => {
+  console.log('🔑 Login button clicked')
+}
+
+const handleMobileLoginNavigation = () => {
+  console.log('🔑 Mobile Login button clicked')
+}
+
+// 认证相关
+const { user, isLoggedIn, logout } = useAuth()
+
+const handleLogout = () => {
+  console.log('🚪 Logout clicked')
+  logout()
+}
+
+const handleMobileLogout = () => {
+  console.log('🚪 Mobile Logout clicked')
+  mobileMenuOpen.value = false
+  logout()
 }
 
 // 监听路由变化

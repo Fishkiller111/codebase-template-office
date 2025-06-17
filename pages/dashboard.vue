@@ -48,16 +48,81 @@
         </nav>
       </div>
 
-      <!-- Bottom Section -->
+      <!-- Bottom Section - User Profile -->
       <div class="absolute bottom-6 left-6 right-6">
-        <div class="bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-xl p-4 border border-purple-500/20">
-          <div class="flex items-center">
-            <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg flex items-center justify-center mr-3">
-              <span class="text-white text-sm font-bold">AI</span>
+        <!-- User Profile Collapsible -->
+        <div class="bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-xl border border-purple-500/20 overflow-hidden">
+          <!-- User Info Header -->
+          <div class="p-4 cursor-pointer hover:bg-purple-500/5 transition-colors duration-200" @click="toggleUserMenu">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center mr-3 overflow-hidden">
+                  <img v-if="user?.avatar" :src="user.avatar" :alt="user.username" class="w-full h-full object-cover">
+                  <span v-else class="text-white text-sm font-bold">{{ user?.username?.charAt(0)?.toUpperCase() || 'U' }}</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-white truncate">{{ user?.username || '用户' }}</p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-2">
+                <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 transform transition-transform duration-200" :class="{ 'rotate-180': isUserMenuOpen }">
+                  <polyline points="6,9 12,15 18,9"></polyline>
+                </svg>
+              </div>
             </div>
-            <div>
-              <p class="text-sm font-medium text-white">AI 智能助手</p>
-              <p class="text-xs text-gray-400">随时为您服务</p>
+          </div>
+
+          <!-- Collapsible Menu -->
+          <div class="overflow-hidden transition-all duration-300 ease-in-out" :class="isUserMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'">
+            <div class="border-t border-purple-500/20 bg-gray-900/50">
+              <!-- Personal Center Options -->
+              <div class="p-2 space-y-1">
+                <NuxtLink to="/profile" class="w-full flex items-center px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-purple-500/10 rounded-lg transition-all duration-200 group">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 group-hover:text-purple-400">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <span>个人资料</span>
+                </NuxtLink>
+                
+                <button class="w-full flex items-center px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-purple-500/10 rounded-lg transition-all duration-200 group">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 group-hover:text-purple-400">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"></path>
+                  </svg>
+                  <span>账户设置</span>
+                </button>
+                
+                <button class="w-full flex items-center px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-purple-500/10 rounded-lg transition-all duration-200 group">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 group-hover:text-purple-400">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="m22 2-5 10-5-10z"></path>
+                  </svg>
+                  <span>会员中心</span>
+                  <span class="ml-auto text-xs bg-gradient-to-r from-purple-500 to-blue-500 px-2 py-1 rounded-full text-white">Pro</span>
+                </button>
+                
+                <button class="w-full flex items-center px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-purple-500/10 rounded-lg transition-all duration-200 group">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 group-hover:text-purple-400">
+                    <path d="M9 12l2 2 4-4"></path>
+                    <path d="M21 12c.552 0 1-.448 1-1V8a2 2 0 0 0-2-2h-5L9.414 2.586A2 2 0 0 0 8 2H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h18a2"></path>
+                  </svg>
+                  <span>我的项目</span>
+                </button>
+                
+                <div class="border-t border-gray-700/50 mt-2 pt-2">
+                  <button @click="logout" class="w-full flex items-center px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all duration-200 group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3">
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                      <polyline points="16,17 21,12 16,7"></polyline>
+                      <line x1="21" x2="9" y1="12" y2="12"></line>
+                    </svg>
+                    <span>退出登录</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -290,11 +355,47 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+
+// 定义中间件保护此页面
+definePageMeta({
+  middleware: 'auth'
+})
 
 useHead({
   title: 'AI 产品说明书生成工具 - Devin AI'
 })
+
+// 用户认证相关
+const { user, logout: authLogout, fetchUser } = useAuth()
+
+// 用户菜单折叠状态
+const isUserMenuOpen = ref(false)
+
+// 页面初始化时获取最新用户信息
+onMounted(async () => {
+  try {
+    // 主动获取最新用户信息并缓存到localStorage
+    await fetchUser()
+  } catch (error) {
+    console.error('获取用户信息失败:', error)
+  }
+})
+
+// 切换用户菜单
+const toggleUserMenu = () => {
+  isUserMenuOpen.value = !isUserMenuOpen.value
+}
+
+// 退出登录
+const logout = async () => {
+  try {
+    await authLogout()
+    await navigateTo('/login')
+  } catch (error) {
+    console.error('退出登录失败:', error)
+  }
+}
 
 // Form data
 const formData = ref({

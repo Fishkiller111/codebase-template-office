@@ -16,11 +16,11 @@
         <div class="text-left scroll-reveal-left">
           <div class="inline-flex items-center px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-300 text-sm font-medium mb-8 hover-lift">
             <span class="w-2 h-2 bg-purple-500 rounded-full mr-2 animate-pulse"></span>
-全球首个AI软件工程师
+AI软件工程师
           </div>
           
-          <h1 class="text-4xl lg:text-6xl xl:text-7xl font-bold mb-10 leading-[1.1] scroll-reveal stagger-1">
-            <span class="block text-white mb-2">将 AI 创意变为现实，</span>
+          <h1 class="text-2xl lg:text-6xl xl:text-6xl font-bold mb-10 leading-[1.1] scroll-reveal stagger-1">
+            <span class="block text-white mb-2">将AI创意变为现实</span>
             <span class="gradient-text block">实现从构想到生产的飞跃</span>
           </h1>
           
