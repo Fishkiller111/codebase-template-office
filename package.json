@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "HOST=0.0.0.0 nuxt dev",
+    "dev": "nuxt dev --host",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -19,6 +19,6 @@
     "prismjs": "^1.29.0"
   },
   "devDependencies": {
-    "@stagewise/toolbar-vue": "^0.4.7"
+    "@stagewise/toolbar-vue": "^0.4.8"
   }
 }

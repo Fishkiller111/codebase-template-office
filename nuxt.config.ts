@@ -4,8 +4,8 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   // 开发服务器配置
   devServer: {
-    port: 3000, // 开发服务器端口
-    host: 'localhost' // 开发服务器地址，0.0.0.0允许外部访问
+    port: parseInt(process.env.NUXT_PORT || '3000'), // 开发服务器端口
+    host: process.env.NUXT_HOST || 'localhost' // 开发服务器地址，0.0.0.0允许外部访问
   },
   modules: [
     '@nuxtjs/tailwindcss',
