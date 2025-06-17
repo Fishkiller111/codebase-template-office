@@ -1,0 +1,358 @@
+# 开发模式和最佳实践
+
+## Vue 3 组合式 API 模式
+
+### 组件结构模板
+```vue
+<template>
+  <!-- 模板内容 -->
+</template>
+
+<script setup>
+import { ref, reactive, onMounted, computed } from 'vue'
+
+// 页面元数据（如果是页面组件）
+definePageMeta({
+  middleware: 'auth' // 需要认证的页面
+})
+
+// SEO 设置
+useHead({
+  title: '页面标题 - Devin AI'
+})
+
+// 响应式数据
+const loading = ref(false)
+const formData = reactive({
+  // 表单数据
+})
+
+// 计算属性
+const isValid = computed(() => {
+  // 验证逻辑
+})
+
+// 生命周期
+onMounted(() => {
+  // 初始化逻辑
+})
+
+// 方法
+const handleSubmit = async () => {
+  // 处理逻辑
+}
+</script>
+
+<style scoped>
+/* 组件样式 */
+</style>
+```
+
+### 认证模式
+参考 [composables/useAuth.ts](mdc:composables/useAuth.ts) 的实现：
+
+```javascript
+// 在组件中使用认证
+const { user, login, logout, isLoggedIn } = useAuth()
+
+// 检查认证状态
+if (!isLoggedIn.value) {
+  await navigateTo('/login')
+}
+```
+
+## API 开发模式
+
+### 服务端 API 结构
+参考 [server/api/auth/login.post.ts](mdc:server/api/auth/login.post.ts)：
+
+```typescript
+export default defineEventHandler(async (event) => {
+  try {
+    // 获取请求体
+    const body = await readBody(event)
+    
+    // 验证输入
+    if (!body.email || !body.password) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: '请提供邮箱和密码'
+      })
+    }
+    
+    // 业务逻辑
+    const result = await handleLogin(body)
+    
+    // 返回结果
+    return {
+      success: true,
+      message: '登录成功',
+      data: result
+    }
+  } catch (error) {
+    // 错误处理
+    throw createError({
+      statusCode: error.statusCode || 500,
+      statusMessage: error.message || '服务器错误'
+    })
+  }
+})
+```
+
+### 客户端 API 调用
+```javascript
+// 使用 $fetch 调用 API
+try {
+  const response = await $fetch('/api/user/profile', {
+    method: 'PUT',
+    body: {
+      username: 'newUsername',
+      email: 'new@email.com'
+    }
+  })
+  
+  if (response.success) {
+    // 处理成功响应
+  }
+} catch (error) {
+  // 处理错误
+  console.error('API 调用失败:', error)
+  alert(error.data?.message || '操作失败')
+}
+```
+
+## 数据库操作模式
+
+### Prisma 使用模式
+参考 [lib/prisma.ts](mdc:lib/prisma.ts)：
+
+```typescript
+import { prisma } from '~/lib/prisma'
+
+// 创建用户
+const user = await prisma.user.create({
+  data: {
+    username: 'john',
+    email: 'john@example.com',
+    password: hashedPassword
+  }
+})
+
+// 查询用户
+const user = await prisma.user.findUnique({
+  where: { email: 'john@example.com' }
+})
+
+// 更新用户
+const updatedUser = await prisma.user.update({
+  where: { id: userId },
+  data: { username: 'newName' }
+})
+```
+
+### 数据库迁移模式
+```bash
+# 1. 修改 prisma/schema.prisma
+# 2. 推送变更到数据库
+pnpm run db:push
+# 3. 生成新的客户端
+pnpm run db:generate
+```
+
+## 状态管理模式
+
+### 全局状态
+使用 `useState` 创建全局状态：
+
+```javascript
+// composables/useGlobalState.ts
+export const useGlobalState = () => {
+  const state = useState('global.state', () => ({
+    theme: 'dark',
+    language: 'zh-CN'
+  }))
+  
+  return {
+    state: readonly(state),
+    updateTheme: (theme) => {
+      state.value.theme = theme
+    }
+  }
+}
+```
+
+### 本地存储集成
+参考 [composables/useAuth.ts](mdc:composables/useAuth.ts) 中的 localStorage 使用：
+
+```javascript
+// 读取缓存
+const cached = localStorage.getItem('key')
+const data = cached ? JSON.parse(cached) : null
+
+// 写入缓存
+const setData = (data) => {
+  localStorage.setItem('key', JSON.stringify(data))
+}
+```
+
+## 样式开发模式
+
+### Tailwind CSS 使用
+```vue
+<template>
+  <!-- Glass Morphism 效果 -->
+  <div class="glass rounded-2xl p-8 border border-gray-700/50 hover-lift shadow-2xl">
+    <!-- 渐变文字 -->
+    <h1 class="gradient-text text-4xl font-bold">标题</h1>
+    
+    <!-- 按钮样式 -->
+    <button class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl transition-all duration-300 hover:scale-105">
+      按钮
+    </button>
+  </div>
+</template>
+
+<style scoped>
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #a855f7 0%, #3b82f6 30%, #06b6d4 70%, #10b981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+</style>
+```
+
+## 表单处理模式
+
+### 表单验证
+```javascript
+// 表单数据
+const formData = reactive({
+  username: '',
+  email: '',
+  password: ''
+})
+
+// 验证规则
+const validate = () => {
+  const errors = []
+  
+  if (!formData.username) {
+    errors.push('用户名不能为空')
+  }
+  
+  if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) {
+    errors.push('请输入有效的邮箱地址')
+  }
+  
+  if (formData.password.length < 6) {
+    errors.push('密码长度至少6位')
+  }
+  
+  return errors
+}
+
+// 提交处理
+const handleSubmit = async () => {
+  const errors = validate()
+  if (errors.length > 0) {
+    alert(errors.join('\n'))
+    return
+  }
+  
+  // 提交逻辑
+}
+```
+
+### 文件上传模式
+参考 [pages/profile.vue](mdc:pages/profile.vue) 中的头像上传：
+
+```javascript
+const handleFileUpload = async (event) => {
+  const file = event.target.files[0]
+  if (!file) return
+  
+  // 验证文件类型
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']
+  if (!allowedTypes.includes(file.type)) {
+    alert('不支持的文件类型')
+    return
+  }
+  
+  // 验证文件大小
+  const maxSize = 5 * 1024 * 1024 // 5MB
+  if (file.size > maxSize) {
+    alert('文件大小超过限制')
+    return
+  }
+  
+  // 转换为 base64
+  const reader = new FileReader()
+  reader.onload = async (e) => {
+    const base64Data = e.target.result
+    // 上传到服务器
+    await uploadFile(base64Data)
+  }
+  reader.readAsDataURL(file)
+}
+```
+
+## 错误处理模式
+
+### 统一错误处理
+```javascript
+// API 错误处理
+const handleApiError = (error) => {
+  console.error('API 错误:', error)
+  
+  if (error.statusCode === 401) {
+    // 未认证，跳转到登录页
+    navigateTo('/login')
+  } else if (error.statusCode === 403) {
+    // 无权限
+    alert('您没有权限执行此操作')
+  } else {
+    // 其他错误
+    alert(error.data?.message || '操作失败，请重试')
+  }
+}
+
+// 在组件中使用
+try {
+  await apiCall()
+} catch (error) {
+  handleApiError(error)
+}
+```
+
+## 性能优化模式
+
+### 懒加载
+```javascript
+// 组件懒加载
+const LazyComponent = defineAsyncComponent(() => import('~/components/HeavyComponent.vue'))
+
+// 路由懒加载（Nuxt 3 自动支持）
+```
+
+### 缓存策略
+```javascript
+// 数据缓存
+const { data, pending, refresh } = await $fetch('/api/data', {
+  key: 'unique-key',
+  server: true, // 服务端渲染
+  default: () => [] // 默认值
+})
+```
+
+这些模式和最佳实践应该在整个项目中保持一致，确保代码的可维护性和可扩展性。

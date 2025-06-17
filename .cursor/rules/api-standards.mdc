@@ -1,0 +1,472 @@
+# API 开发标准和规范
+
+## API 架构设计
+
+### RESTful API 设计原则
+- 使用标准 HTTP 方法：GET、POST、PUT、DELETE
+- 资源导向的 URL 设计
+- 统一的响应格式
+- 适当的 HTTP 状态码
+
+### URL 命名规范
+```
+/api/auth/login       POST   - 用户登录
+/api/auth/register    POST   - 用户注册
+/api/auth/logout      POST   - 用户登出
+/api/auth/me          GET    - 获取当前用户信息
+
+/api/user/profile     PUT    - 更新用户资料
+/api/user/password    PUT    - 修改密码
+/api/user/avatar      POST   - 上传头像
+```
+
+## 响应格式标准
+
+### 成功响应
+```json
+{
+  "success": true,
+  "message": "操作成功",
+  "data": {
+    // 具体数据
+  }
+}
+```
+
+### 错误响应
+```json
+{
+  "success": false,
+  "message": "错误描述",
+  "error": {
+    "code": "ERROR_CODE",
+    "details": "详细错误信息"
+  }
+}
+```
+
+## 认证系统
+
+### JWT 认证实现
+参考 [server/api/auth/login.post.ts](mdc:server/api/auth/login.post.ts)：
+
+```typescript
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcryptjs'
+
+export default defineEventHandler(async (event) => {
+  try {
+    const { email, password } = await readBody(event)
+    
+    // 验证用户
+    const user = await prisma.user.findUnique({
+      where: { email }
+    })
+    
+    if (!user || !await bcrypt.compare(password, user.password)) {
+      throw createError({
+        statusCode: 401,
+        statusMessage: '邮箱或密码错误'
+      })
+    }
+    
+    // 生成 JWT
+    const token = jwt.sign(
+      { userId: user.id },
+      process.env.JWT_SECRET!,
+      { expiresIn: '7d' }
+    )
+    
+    // 设置 httpOnly cookie
+    setCookie(event, 'auth-token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7 // 7 days
+    })
+    
+    return {
+      success: true,
+      message: '登录成功',
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        avatar: user.avatar,
+        bio: user.bio
+      }
+    }
+  } catch (error) {
+    throw createError({
+      statusCode: error.statusCode || 500,
+      statusMessage: error.statusMessage || '登录失败'
+    })
+  }
+})
+```
+
+### 认证中间件
+```typescript
+// 验证 JWT Token
+export const verifyToken = (event: any) => {
+  const token = getCookie(event, 'auth-token')
+  
+  if (!token) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: '未登录'
+    })
+  }
+  
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET!) as any
+    return payload.userId
+  } catch (error) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: '登录已过期'
+    })
+  }
+}
+```
+
+## 输入验证
+
+### 数据验证模式
+```typescript
+// 验证邮箱格式
+const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(email)
+}
+
+// 验证密码强度
+const validatePassword = (password: string): string[] => {
+  const errors = []
+  
+  if (password.length < 6) {
+    errors.push('密码长度至少6位')
+  }
+  
+  if (!/[A-Za-z]/.test(password)) {
+    errors.push('密码必须包含字母')
+  }
+  
+  if (!/[0-9]/.test(password)) {
+    errors.push('密码必须包含数字')
+  }
+  
+  return errors
+}
+
+// API 中使用验证
+export default defineEventHandler(async (event) => {
+  const { email, password } = await readBody(event)
+  
+  // 验证输入
+  if (!email || !validateEmail(email)) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: '请提供有效的邮箱地址'
+    })
+  }
+  
+  const passwordErrors = validatePassword(password)
+  if (passwordErrors.length > 0) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: passwordErrors.join(', ')
+    })
+  }
+  
+  // 继续处理...
+})
+```
+
+## 数据库操作
+
+### Prisma 操作模式
+参考 [lib/prisma.ts](mdc:lib/prisma.ts)：
+
+```typescript
+import { PrismaClient } from '~/generated/prisma'
+
+// 创建 Prisma 客户端
+const prisma = new PrismaClient()
+
+// 用户操作示例
+export const userOperations = {
+  // 创建用户
+  async createUser(data: {
+    username: string
+    email: string
+    password: string
+  }) {
+    return await prisma.user.create({
+      data: {
+        ...data,
+        password: await bcrypt.hash(data.password, 12)
+      }
+    })
+  },
+  
+  // 查找用户
+  async findUserByEmail(email: string) {
+    return await prisma.user.findUnique({
+      where: { email }
+    })
+  },
+  
+  // 更新用户
+  async updateUser(id: string, data: any) {
+    return await prisma.user.update({
+      where: { id },
+      data
+    })
+  },
+  
+  // 删除敏感信息
+  sanitizeUser(user: any) {
+    const { password, ...sanitized } = user
+    return sanitized
+  }
+}
+```
+
+### 事务处理
+```typescript
+// 使用事务确保数据一致性
+export default defineEventHandler(async (event) => {
+  try {
+    const result = await prisma.$transaction(async (tx) => {
+      // 多个数据库操作
+      const user = await tx.user.update({
+        where: { id: userId },
+        data: { username: newUsername }
+      })
+      
+      await tx.userLog.create({
+        data: {
+          userId: userId,
+          action: 'UPDATE_USERNAME',
+          details: `用户名更改为: ${newUsername}`
+        }
+      })
+      
+      return user
+    })
+    
+    return {
+      success: true,
+      data: result
+    }
+  } catch (error) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: '更新失败'
+    })
+  }
+})
+```
+
+## 文件处理
+
+### Base64 文件上传
+参考 [server/api/user/avatar.post.ts](mdc:server/api/user/avatar.post.ts)：
+
+```typescript
+export default defineEventHandler(async (event) => {
+  try {
+    const userId = verifyToken(event)
+    const { avatar } = await readBody(event)
+    
+    // 验证 base64 格式
+    const base64Regex = /^data:image\/(jpeg|jpg|png|gif|webp);base64,/
+    if (!base64Regex.test(avatar)) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: '无效的图片格式'
+      })
+    }
+    
+    // 计算文件大小
+    const base64Data = avatar.split(',')[1]
+    const sizeInBytes = (base64Data.length * 3) / 4
+    const maxSize = 5 * 1024 * 1024 // 5MB
+    
+    if (sizeInBytes > maxSize) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: '文件大小超过5MB限制'
+      })
+    }
+    
+    // 保存到数据库
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: { avatar }
+    })
+    
+    return {
+      success: true,
+      message: '头像上传成功',
+      user: userOperations.sanitizeUser(user)
+    }
+  } catch (error) {
+    throw createError({
+      statusCode: error.statusCode || 500,
+      statusMessage: error.statusMessage || '头像上传失败'
+    })
+  }
+})
+```
+
+## 错误处理
+
+### 统一错误处理
+```typescript
+// 创建标准错误
+const createApiError = (statusCode: number, message: string, details?: any) => {
+  return createError({
+    statusCode,
+    statusMessage: message,
+    data: {
+      success: false,
+      message,
+      error: {
+        code: `HTTP_${statusCode}`,
+        details
+      }
+    }
+  })
+}
+
+// 常用错误类型
+export const ApiErrors = {
+  UNAUTHORIZED: () => createApiError(401, '未授权访问'),
+  FORBIDDEN: () => createApiError(403, '权限不足'),
+  NOT_FOUND: (resource: string) => createApiError(404, `${resource}不存在`),
+  VALIDATION_ERROR: (message: string) => createApiError(400, message),
+  INTERNAL_ERROR: () => createApiError(500, '服务器内部错误')
+}
+```
+
+### 全局错误处理
+```typescript
+export default defineEventHandler(async (event) => {
+  try {
+    // API 逻辑
+  } catch (error) {
+    // 记录错误日志
+    console.error('API Error:', {
+      url: event.node.req.url,
+      method: event.node.req.method,
+      error: error.message,
+      stack: error.stack
+    })
+    
+    // 返回用户友好的错误信息
+    if (error.statusCode) {
+      throw error // 已经是标准错误格式
+    }
+    
+    // 未知错误，返回通用错误
+    throw createError({
+      statusCode: 500,
+      statusMessage: '服务器错误，请稍后重试'
+    })
+  }
+})
+```
+
+## 性能优化
+
+### 数据库查询优化
+```typescript
+// 使用 select 只查询需要的字段
+const user = await prisma.user.findUnique({
+  where: { id: userId },
+  select: {
+    id: true,
+    username: true,
+    email: true,
+    avatar: true,
+    bio: true
+    // 不查询 password 等敏感字段
+  }
+})
+
+// 使用 include 预加载关联数据
+const userWithPosts = await prisma.user.findUnique({
+  where: { id: userId },
+  include: {
+    posts: {
+      take: 10, // 限制数量
+      orderBy: { createdAt: 'desc' }
+    }
+  }
+})
+```
+
+### 缓存策略
+```typescript
+// 简单内存缓存
+const cache = new Map()
+
+export const getCachedUser = async (userId: string) => {
+  const cacheKey = `user:${userId}`
+  
+  if (cache.has(cacheKey)) {
+    return cache.get(cacheKey)
+  }
+  
+  const user = await prisma.user.findUnique({
+    where: { id: userId }
+  })
+  
+  if (user) {
+    cache.set(cacheKey, user)
+    // 设置过期时间
+    setTimeout(() => cache.delete(cacheKey), 5 * 60 * 1000) // 5分钟
+  }
+  
+  return user
+}
+```
+
+## API 文档
+
+### 接口文档格式
+```typescript
+/**
+ * 用户登录 API
+ * 
+ * @route POST /api/auth/login
+ * @param {string} email - 用户邮箱
+ * @param {string} password - 用户密码
+ * @returns {Object} 登录结果
+ * @returns {boolean} success - 是否成功
+ * @returns {string} message - 返回消息
+ * @returns {Object} user - 用户信息
+ * 
+ * @example
+ * POST /api/auth/login
+ * {
+ *   "email": "user@example.com",
+ *   "password": "password123"
+ * }
+ * 
+ * Response:
+ * {
+ *   "success": true,
+ *   "message": "登录成功",
+ *   "user": {
+ *     "id": "user-id",
+ *     "username": "username",
+ *     "email": "user@example.com"
+ *   }
+ * }
+ */
+```
+
+这些 API 标准确保了后端服务的一致性、安全性和可维护性。在开发新的 API 端点时，请严格遵循这些规范。

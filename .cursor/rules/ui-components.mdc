@@ -1,0 +1,304 @@
+# UI 组件设计规范
+
+## 设计系统
+
+### 颜色规范
+- **主色调**: 紫色系 (`purple-500` 到 `purple-700`)
+- **辅助色**: 蓝色系 (`blue-500` 到 `blue-700`)
+- **背景色**: 深灰色系 (`gray-800`, `gray-900`)
+- **文字色**: 白色和灰色系 (`white`, `gray-300`, `gray-400`)
+- **状态色**: 
+  - 成功: `green-500`
+  - 警告: `yellow-500`
+  - 错误: `red-500`
+
+### 间距规范
+- **组件内边距**: `p-4`, `p-6`, `p-8`
+- **组件外边距**: `mb-4`, `mb-6`, `mb-8`
+- **元素间距**: `space-y-2`, `space-y-4`, `space-x-3`
+
+## 核心组件
+
+### 导航组件
+参考 [components/Navigation.vue](mdc:components/Navigation.vue)：
+
+```vue
+<!-- 导航链接 -->
+<NuxtLink 
+  to="/path" 
+  class="flex items-center px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-gray-700/50 transition-all duration-300 group"
+>
+  <svg class="mr-3 group-hover:text-purple-400"><!-- 图标 --></svg>
+  <span class="font-medium">链接文字</span>
+</NuxtLink>
+```
+
+### 按钮组件
+```vue
+<!-- 主要按钮 -->
+<button class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl transition-all duration-300 hover:scale-105 disabled:opacity-50">
+  主要按钮
+</button>
+
+<!-- 次要按钮 -->
+<button class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-xl transition-all duration-300">
+  次要按钮
+</button>
+
+<!-- 危险按钮 -->
+<button class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl transition-all duration-300">
+  危险按钮
+</button>
+```
+
+### 输入框组件
+```vue
+<!-- 标准输入框 -->
+<div class="space-y-2">
+  <label class="block text-sm font-semibold text-gray-200">标签</label>
+  <input 
+    v-model="value"
+    type="text" 
+    class="w-full px-4 py-3 bg-gray-800/80 border border-gray-600/50 rounded-xl text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
+    placeholder="请输入..."
+  >
+</div>
+
+<!-- 文本域 -->
+<textarea 
+  v-model="value"
+  class="w-full px-4 py-3 bg-gray-800/80 border border-gray-600/50 rounded-xl text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 resize-none"
+  rows="4"
+  placeholder="请输入..."
+></textarea>
+```
+
+### 卡片组件
+```vue
+<!-- Glass Morphism 卡片 -->
+<div class="glass rounded-2xl p-8 border border-gray-700/50 hover-lift shadow-2xl">
+  <!-- 卡片头部 -->
+  <div class="flex items-center mb-6">
+    <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center mr-3">
+      <svg class="text-white"><!-- 图标 --></svg>
+    </div>
+    <div>
+      <h3 class="text-2xl font-bold text-white">卡片标题</h3>
+      <p class="text-gray-400 text-sm">卡片描述</p>
+    </div>
+  </div>
+  
+  <!-- 卡片内容 -->
+  <div class="space-y-4">
+    <!-- 内容区域 -->
+  </div>
+</div>
+```
+
+### 头像组件
+参考 [pages/profile.vue](mdc:pages/profile.vue) 中的头像实现：
+
+```vue
+<!-- 用户头像 -->
+<div class="w-32 h-32 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center overflow-hidden group cursor-pointer">
+  <img 
+    v-if="avatar" 
+    :src="avatar" 
+    :alt="username" 
+    class="w-full h-full object-cover"
+  >
+  <span 
+    v-else 
+    class="text-white text-3xl font-bold"
+  >
+    {{ username?.charAt(0)?.toUpperCase() || 'U' }}
+  </span>
+  
+  <!-- 上传覆盖层 -->
+  <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-full">
+    <svg class="text-white"><!-- 相机图标 --></svg>
+  </div>
+</div>
+```
+
+### 开关组件
+```vue
+<!-- Toggle 开关 -->
+<label class="relative inline-flex items-center cursor-pointer">
+  <input v-model="enabled" type="checkbox" class="sr-only peer">
+  <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+</label>
+```
+
+### 折叠菜单组件
+```vue
+<!-- 折叠菜单 -->
+<div class="overflow-hidden transition-all duration-300 ease-in-out" :class="isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'">
+  <div class="border-t border-gray-700/50 bg-gray-900/50">
+    <div class="p-2 space-y-1">
+      <button class="w-full flex items-center px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-purple-500/10 rounded-lg transition-all duration-200 group">
+        <svg class="mr-3 group-hover:text-purple-400"><!-- 图标 --></svg>
+        <span>菜单项</span>
+      </button>
+    </div>
+  </div>
+</div>
+```
+
+## 动画效果
+
+### 基础动画类
+```css
+/* 悬停提升效果 */
+.hover-lift {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* 渐变文字动画 */
+.gradient-text {
+  background: linear-gradient(135deg, #a855f7 0%, #3b82f6 30%, #06b6d4 70%, #10b981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease-in-out infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* 脉冲动画 */
+.animate-pulse-slow {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+```
+
+### 过渡动画
+```css
+/* 通用过渡 */
+.transition-all {
+  transition: all 0.3s ease-in-out;
+}
+
+/* 变换过渡 */
+.transition-transform {
+  transition: transform 0.2s ease-in-out;
+}
+
+/* 透明度过渡 */
+.transition-opacity {
+  transition: opacity 0.3s ease-in-out;
+}
+```
+
+## 响应式设计
+
+### 断点使用
+```vue
+<!-- 移动端优先的响应式设计 -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <!-- 内容 -->
+</div>
+
+<!-- 响应式文字大小 -->
+<h1 class="text-2xl md:text-3xl lg:text-4xl font-bold">标题</h1>
+
+<!-- 响应式间距 -->
+<div class="p-4 md:p-6 lg:p-8">
+  <!-- 内容 -->
+</div>
+```
+
+### 移动端适配
+```vue
+<!-- 移动端菜单 -->
+<div class="block md:hidden">
+  <!-- 移动端导航 -->
+</div>
+
+<div class="hidden md:block">
+  <!-- 桌面端导航 -->
+</div>
+```
+
+## 状态指示
+
+### 加载状态
+```vue
+<!-- 加载按钮 -->
+<button :disabled="loading" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white rounded-xl transition-all duration-300">
+  <svg v-if="loading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+  </svg>
+  {{ loading ? '处理中...' : '提交' }}
+</button>
+```
+
+### 在线状态指示
+```vue
+<!-- 在线状态 -->
+<div class="flex items-center space-x-2">
+  <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+  <span class="text-sm text-green-400 font-medium">在线</span>
+</div>
+```
+
+### 徽章组件
+```vue
+<!-- 状态徽章 -->
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+  Pro
+</span>
+
+<!-- 数量徽章 -->
+<span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+  3
+</span>
+```
+
+## 图标系统
+
+### 图标使用规范
+- 使用 Lucide 图标库风格的 SVG 图标
+- 标准尺寸：16px, 20px, 24px
+- 颜色：继承父元素颜色或使用 `text-gray-400`, `text-purple-400` 等
+
+```vue
+<!-- 标准图标 -->
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+  <path d="图标路径"/>
+</svg>
+```
+
+## 表单组件
+
+### 表单布局
+```vue
+<!-- 表单容器 -->
+<form @submit.prevent="handleSubmit" class="space-y-6">
+  <!-- 表单行 -->
+  <div class="grid md:grid-cols-2 gap-6">
+    <!-- 表单字段 -->
+  </div>
+  
+  <!-- 提交按钮 -->
+  <div class="flex justify-end space-x-4">
+    <button type="button" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-xl transition-all duration-300">
+      取消
+    </button>
+    <button type="submit" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl transition-all duration-300">
+      保存
+    </button>
+  </div>
+</form>
+```
+
+这些组件规范确保了整个应用的视觉一致性和用户体验的连贯性。在开发新功能时，请参考这些设计模式。
