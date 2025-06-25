@@ -41,9 +41,9 @@ export default defineNuxtConfig({
       duration: 300
     },
     head: {
-      title: 'Devin - AI Software Engineer',
+      title: 'WebAI - AI Software Engineer',
       meta: [
-        { name: 'description', content: 'Meet Devin, the first AI software engineer' },
+        { name: 'description', content: 'Meet WebAI, the first AI software engineer' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' }
       ],
       link: [

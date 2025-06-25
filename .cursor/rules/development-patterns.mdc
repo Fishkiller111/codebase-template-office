@@ -18,7 +18,7 @@ definePageMeta({
 
 // SEO 设置
 useHead({
-  title: '页面标题 - Devin AI'
+  title: '页面标题 - WebAI AI'
 })
 
 // 响应式数据

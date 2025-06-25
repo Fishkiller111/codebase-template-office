@@ -1,4 +1,4 @@
-# Devin AI 项目开发规范
+# WebAI AI 项目开发规范
 
 ## 项目概述
 这是一个基于 Nuxt 3 的现代化 Web 应用，提供 AI 代码生成和用户管理功能。项目采用 TypeScript、Tailwind CSS、Prisma ORM 和 PostgreSQL 技术栈。
