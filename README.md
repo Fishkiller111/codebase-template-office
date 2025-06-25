@@ -4,11 +4,9 @@ A modern AI-RAG template built with Nuxt.js, featuring complete user authenticat
 
 # Chinese readme vision
 
-```
-README_cn.md
-```
+[README_cn.md]()
 
-## ✨ Key Features
+✨ Key Features
 
 - 🔐 **User Authentication System** - Registration, login, JWT token verification
 - 👤 **Profile Management** - Avatar upload, profile editing, password modification
