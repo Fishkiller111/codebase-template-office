@@ -4,7 +4,7 @@
       <div class="grid md:grid-cols-4 gap-8">
         <!-- Company Info -->
         <div class="md:col-span-1">
-          <div class="text-2xl font-bold gradient-text mb-4">Devin</div>
+          <div class="text-2xl font-bold gradient-text mb-4">WebAI</div>
           <p class="text-gray-400 mb-6 leading-relaxed">
             全球首个AI软件工程师，构建自主软件开发的未来。
           </p>
@@ -64,7 +64,7 @@
       <!-- Bottom Bar -->
       <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
         <div class="text-gray-400 text-sm mb-4 md:mb-0">
-          © 2024 Devin AI. 保留所有权利。
+          © 2024 WebAI AI. 保留所有权利。
         </div>
         <div class="flex space-x-6 text-sm">
           <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">隐私政策</a>

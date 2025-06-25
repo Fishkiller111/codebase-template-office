@@ -4,10 +4,10 @@
       <!-- Header -->
       <div class="text-center mb-16 animate-fade-up">
         <h2 class="text-4xl lg:text-5xl font-bold mb-6">
-          观看 <span class="gradient-text">Devin</span> 实战演示
+          观看 <span class="gradient-text">WebAI</span> 实战演示
         </h2>
         <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-          观看 Devin 如何从简单的提示构建完整的电商应用程序。
+          观看 WebAI 如何从简单的提示构建完整的电商应用程序。
         </p>
       </div>
       
@@ -281,7 +281,7 @@ const demoSteps = {
     {
       id: 1,
       title: '需求分析',
-      description: 'Devin 分析"构建电商平台"的提示，并创建全面的项目计划。',
+      description: 'WebAI 分析"构建电商平台"的提示，并创建全面的项目计划。',
       status: '已完成',
       duration: '30秒'
     },

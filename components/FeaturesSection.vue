@@ -7,7 +7,7 @@
           <span class="gradient-text">超人级</span> 能力
         </h2>
         <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-          Devin 不仅仅是编写代码——它像拥有多年经验的高级软件工程师一样思考、规划和执行。
+          WebAI 不仅仅是编写代码——它像拥有多年经验的高级软件工程师一样思考、规划和执行。
         </p>
       </div>
       
@@ -48,7 +48,7 @@
         <div class="glass p-8 rounded-xl scroll-reveal-left hover-lift">
           <h3 class="text-2xl font-bold mb-6 text-white">实时代码生成</h3>
           <div class="bg-gray-900 rounded-lg p-4 font-mono text-sm border border-gray-700">
-            <div class="text-gray-500"># Devin 理解自然语言</div>
+            <div class="text-gray-500"># WebAI 理解自然语言</div>
             <div class="text-purple-400 mt-2">> "创建用户认证的 REST API"</div>
             <div class="mt-4 space-y-1">
               <div class="text-green-400 scroll-reveal stagger-child">✓ 生成 Express.js 服务器</div>
@@ -64,7 +64,7 @@
           <h3 class="text-2xl font-bold mb-6 text-white">智能调试</h3>
           <div class="bg-gray-900 rounded-lg p-4 font-mono text-sm border border-gray-700">
             <div class="text-red-400 scroll-reveal stagger-child">错误: 无法读取未定义对象的 'name' 属性</div>
-            <div class="text-gray-500 mt-2 scroll-reveal stagger-child"># Devin 的分析:</div>
+            <div class="text-gray-500 mt-2 scroll-reveal stagger-child"># WebAI 的分析:</div>
             <div class="mt-2 space-y-1">
               <div class="text-blue-400 scroll-reveal stagger-child">📍 第42行: user 对象为空</div>
               <div class="text-yellow-400 scroll-reveal stagger-child">🔍 缺少空值检查</div>
@@ -97,7 +97,7 @@ const features = [
   {
     icon: Zap,
     title: '闪电般快速',
-    description: '在几分钟内生成生产就绪的代码，而不是几小时。人类开发者需要几天的工作，Devin几分钟就能完成。',
+    description: '在几分钟内生成生产就绪的代码，而不是几小时。人类开发者需要几天的工作，WebAI几分钟就能完成。',
     stat: '速度提升',
     metric: '快50倍'
   },

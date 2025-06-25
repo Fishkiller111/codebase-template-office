@@ -14,7 +14,7 @@
         </h2>
         
         <p class="text-xl lg:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
-          加入数千名已经在使用 Devin 更快构建更好软件的开发者。
+          加入数千名已经在使用 WebAI 更快构建更好软件的开发者。
           获得早期访问权限，成为 AI 革命的一部分。
         </p>
         
@@ -44,7 +44,7 @@
       <!-- Newsletter Signup -->
       <div class="glass max-w-2xl mx-auto p-8 rounded-xl animate-fade-up">
         <h3 class="text-2xl font-bold mb-4 text-white">保持更新</h3>
-        <p class="text-gray-300 mb-6">获取 Devin 的最新更新，第一时间体验新功能。</p>
+        <p class="text-gray-300 mb-6">获取 WebAI 的最新更新，第一时间体验新功能。</p>
         
         <form class="flex flex-col sm:flex-row gap-4">
           <input 

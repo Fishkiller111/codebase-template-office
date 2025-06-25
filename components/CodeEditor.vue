@@ -9,7 +9,7 @@
           <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
           <div class="w-3 h-3 bg-green-500 rounded-full"></div>
         </div>
-        <div class="text-gray-400 text-sm font-mono">devin-ai-assistant.py</div>
+        <div class="text-gray-400 text-sm font-mono">ai-assistant.py</div>
         <div class="w-16"></div>
       </div>
       
@@ -22,7 +22,7 @@
             <div class="text-purple-400">import</div>
             <div class="text-white ml-2">ai_assistant</div>
             <div class="text-purple-400 ml-2">from</div>
-            <div class="text-green-400 ml-2">'devin'</div>
+            <div class="text-green-400 ml-2">'WebAI'</div>
           </div>
           
           <div class="flex">
@@ -38,7 +38,7 @@
           <div class="flex">
             <div class="text-gray-500 mr-4 select-none">4</div>
             <div class="text-blue-400">class</div>
-            <div class="text-yellow-400 ml-2">DevinAI</div>
+            <div class="text-yellow-400 ml-2">WebAI</div>
             <div class="text-white">:</div>
           </div>
           
@@ -76,7 +76,7 @@
         <!-- Terminal Output -->
         <div class="mt-6 border-t border-gray-700 pt-4">
           <div class="text-green-400 text-xs">
-            <div>$ devin build --app="E-commerce Platform"</div>
+            <div>$ AI build --app="E-commerce Platform"</div>
             <div class="text-gray-400 mt-2">
               ✓ Analyzing requirements...<br>
               ✓ Generating architecture...<br>

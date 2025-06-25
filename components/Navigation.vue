@@ -9,7 +9,7 @@
             class="text-2xl font-bold gradient-text hover:scale-105 transition-transform duration-200"
             @click="handleLogoClick"
           >
-            Devin
+            WebAI
           </NuxtLink>
         </div>
         

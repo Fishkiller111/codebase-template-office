@@ -6,7 +6,7 @@
           <span class="gradient-text">验证的</span> 成果
         </h2>
         <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-          数据不会说谎。看看 Devin 如何革命性地改变软件开发。
+          数据不会说谎。看看 WebAI 如何革命性地改变软件开发。
         </p>
       </div>
       

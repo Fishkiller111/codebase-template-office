@@ -30,9 +30,9 @@
 import { useScrollAnimations } from '~/composables/useScrollAnimations'
 
 useHead({
-  title: 'Devin - AI Software Engineer',
+  title: 'WebAI - AI Software Engineer',
   meta: [
-    { name: 'description', content: 'Meet Devin, the first AI software engineer that can build entire apps, debug code, and deploy systems end-to-end.' }
+    { name: 'description', content: 'Meet WebAI, the first AI software engineer that can build entire apps, debug code, and deploy systems end-to-end.' }
   ]
 })
 

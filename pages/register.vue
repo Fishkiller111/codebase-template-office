@@ -15,7 +15,7 @@
             to="/" 
             class="text-3xl font-bold gradient-text hover:scale-105 transition-transform duration-200 inline-block"
           >
-            Devin
+          WebAI
           </NuxtLink>
           <h2 class="mt-6 text-2xl font-bold text-white">
             创建您的账户
@@ -209,9 +209,9 @@ const router = useRouter()
 
 // 页面元数据
 useHead({
-  title: '注册 - Devin AI软件工程师',
+  title: '注册 - WebAI AI软件工程师',
   meta: [
-    { name: 'description', content: '注册Devin AI软件工程师平台账户' }
+    { name: 'description', content: '注册WebAI AI软件工程师平台账户' }
   ]
 })
 
@@ -324,7 +324,7 @@ onMounted(() => {
 .gradient-text {
   background: linear-gradient(135deg, #A855F7, #3B82F6, #EC4899);
   background-size: 300% 300%;
-  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: gradient-shift 3s ease-in-out infinite;
 }

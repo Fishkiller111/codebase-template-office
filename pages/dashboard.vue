@@ -13,7 +13,7 @@
               <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
             </svg>
           </div>
-          <span class="text-xl font-bold gradient-text">Devin AI</span>
+          <span class="text-xl font-bold gradient-text">WebAI AI</span>
         </div>
 
         <!-- Navigation Menu -->
@@ -363,7 +363,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'AI 产品说明书生成工具 - Devin AI'
+  title: 'AI 产品说明书生成工具 - WebAI AI'
 })
 
 // 用户认证相关
