@@ -1,137 +1,114 @@
-# 🏢 办公模板系统
+# 🏢 AI Template System
 
-一个基于 Nuxt.js 构建的现代化办公系统模板，包含完整的用户认证、个人资料管理等功能。
+A modern AI-RAG template built with Nuxt.js, featuring complete user authentication and profile management capabilities.
 
-## ✨ 主要功能
+# Chinese readme vision
 
-- 🔐 **用户认证系统** - 注册、登录、JWT令牌验证
-- 👤 **个人资料管理** - 头像上传、资料编辑、密码修改
-- 🎨 **现代化界面** - 响应式设计，支持深色模式
-- 📊 **仪表板** - 用户信息展示，折叠式菜单
-- 🔒 **安全保护** - 路由中间件，API权限验证
+```
+README_cn.md
+```
 
-## 🛠 技术栈
+## ✨ Key Features
 
-- **前端框架**: [Nuxt.js 3](https://nuxt.com) + Vue.js
-- **样式框架**: [Tailwind CSS](https://tailwindcss.com)
-- **数据库**: PostgreSQL + [Prisma ORM](https://prisma.io)
-- **身份验证**: JWT + bcryptjs
-- **图标库**: Lucide Vue Next
-- **代码高亮**: Prism.js
+- 🔐 **User Authentication System** - Registration, login, JWT token verification
+- 👤 **Profile Management** - Avatar upload, profile editing, password modification
+- 🎨 **Modern Interface** - Responsive design with dark mode support
+- 📊 **Dashboard** - User information display with collapsible menus
+- 🔒 **Security Protection** - Route middleware and API permission verification
 
-## 📁 项目结构
+## 🛠 Tech Stack
+
+- **Frontend Framework**: [Nuxt.js 3](https://nuxt.com) + Vue.js
+- **Styling Framework**: [Tailwind CSS](https://tailwindcss.com)
+- **Database**: PostgreSQL + [Prisma ORM](https://prisma.io)
+- **Authentication**: JWT + bcryptjs
+- **Icon Library**: Lucide Vue Next
+- **Code Highlighting**: Prism.js
+
+## 📁 Project Structure
 
 ```
 codebase-template-office/
-├── components/          # Vue组件
-├── pages/              # 页面路由
-├── server/api/         # API端点
-├── prisma/             # 数据库模型
-├── composables/        # 组合式函数
-├── middleware/         # 路由中间件
-└── assets/css/         # 样式文件
+├── components/          # Vue components
+├── pages/              # Page routes
+├── server/api/         # API endpoints
+├── prisma/             # Database models
+├── composables/        # Composable functions
+├── middleware/         # Route middleware
+└── assets/css/         # Style files
 ```
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 1. 安装依赖
+### 1. Install Dependencies
 
 ```bash
 pnpm install
 ```
 
-### 2. 环境配置
+### 2. Environment Configuration
 
-创建 `.env` 文件：
+Create a `.env` file:
 
 ```bash
-# 数据库连接
+# Database connection
 DATABASE_URL="postgresql://username:password@localhost:5432/database"
 
-# JWT密钥
+# JWT secret
 JWT_SECRET="your-super-secret-jwt-key"
+
+# Application configuration
+NUXT_PUBLIC_APP_NAME=
+NUXT_PUBLIC_APP_URL=backend-address
 ```
 
-### 3. 数据库设置
+### 3. Database Setup
 
 ```bash
-# 生成Prisma客户端
+# Generate Prisma client
 pnpm run db:generate
 
-# 推送数据库模型
+# Push database models
 pnpm run db:push
 ```
 
-### 4. 启动开发服务器
+### 4. Start Development Server
 
 ```bash
 pnpm dev
 ```
 
-访问 [http://localhost:3000](http://localhost:3000) 查看应用。
+Visit [http://localhost:3000](http://localhost:3000) to view the application.
 
-## 📖 主要页面
+## 📖 Main Pages
 
-- **首页** (`/`) - 产品介绍和功能展示
-- **注册** (`/register`) - 用户注册页面  
-- **登录** (`/login`) - 用户登录页面
-- **仪表板** (`/dashboard`) - 用户工作台
-- **个人资料** (`/profile`) - 个人信息管理
+- **Home** (`/`) - Product introduction and feature showcase
+- **Register** (`/register`) - User registration page
+- **Login** (`/login`) - User login page
+- **Dashboard** (`/dashboard`) - User workspace
+- **Profile** (`/profile`) - Personal information management
 
-## 🔧 可用命令
+## 🔧 Available Commands
 
 ```bash
-# 开发
-pnpm dev              # 启动开发服务器
+# Development
+pnpm dev              # Start development server
 
-# 构建
-pnpm build            # 构建生产版本
-pnpm preview          # 预览生产构建
+# Build
+pnpm build            # Build production version
+pnpm preview          # Preview production build
 
-# 数据库
-pnpm run db:generate  # 生成Prisma客户端
-pnpm run db:push      # 推送数据库模型
-pnpm run db:studio    # 打开Prisma Studio
-pnpm run db:reset     # 重置数据库
+# Database
+pnpm run db:generate  # Generate Prisma client
+pnpm run db:push      # Push database models
+pnpm run db:studio    # Open Prisma Studio
+pnpm run db:reset     # Reset database
 ```
 
-## 🎯 核心特性
+## 🤝 Contributing
 
-### 用户认证
-- 注册新用户账户
-- 安全的密码加密存储
-- JWT令牌身份验证
-- 自动登录状态管理
+Welcome to submit Issues and Pull Requests to improve this project!
 
-### 个人资料管理
-- 用户信息编辑（用户名、邮箱、简介）
-- 头像上传（支持Base64格式）
-- 安全的密码修改
-- 个人资料页面完整功能
+## 📄 License
 
-### 仪表板功能
-- 用户信息显示
-- 折叠式用户菜单
-- 在线状态指示器
-- 响应式布局设计
-
-## 📝 API接口
-
-### 认证相关
-- `POST /api/auth/register` - 用户注册
-- `POST /api/auth/login` - 用户登录
-- `POST /api/auth/logout` - 用户退出
-- `GET /api/auth/me` - 获取当前用户信息
-
-### 用户管理
-- `PUT /api/user/profile` - 更新个人资料
-- `PUT /api/user/password` - 修改密码
-- `POST /api/user/avatar` - 上传头像
-
-## 🤝 贡献
-
-欢迎提交 Issues 和 Pull Requests 来改进这个项目！
-
-## 📄 开源协议
-
-本项目采用 MIT 协议开源。
+This project is open source under the MIT License.
