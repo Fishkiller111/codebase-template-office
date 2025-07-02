@@ -3,23 +3,25 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxi dev --host",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
+    "build": "NODE_ENV=production pnpm run db:generate:prod && nuxt build",
+    "dev": "NODE_ENV=development dotenv -e .env.development -- nuxi dev --host",
+    "generate": "NODE_ENV=production nuxt generate",
+    "preview": "NODE_ENV=production dotenv -e .env.production -- nuxt preview",
     "postinstall": "nuxt prepare",
-    "db:generate": "prisma generate",
-    "db:push": "prisma db push",
-    "db:pull": "prisma db pull",
-    "db:studio": "prisma studio",
-    "db:migrate": "prisma migrate dev",
-    "db:migrate:deploy": "prisma migrate deploy",
-    "db:migrate:reset": "prisma migrate reset",
-    "db:migrate:status": "prisma migrate status",
+    "db:generate": "dotenv -e .env.development -- prisma generate",
+    "db:generate:prod": "dotenv -e .env.production -- prisma generate",
+    "db:push": "dotenv -e .env.development -- prisma db push",
+    "db:push:prod": "dotenv -e .env.production -- prisma db push",
+    "db:pull": "dotenv -e .env.development -- prisma db pull",
+    "db:studio": "dotenv -e .env.development -- prisma studio",
+    "db:migrate": "dotenv -e .env.development -- prisma migrate dev",
+    "db:migrate:deploy": "dotenv -e .env.production -- prisma migrate deploy",
+    "db:migrate:reset": "dotenv -e .env.development -- prisma migrate reset",
+    "db:migrate:status": "dotenv -e .env.development -- prisma migrate status",
     "db:format": "prisma format",
-    "db:validate": "prisma validate",
-    "db:seed": "prisma db seed",
-    "db:reset": "prisma migrate reset && prisma db push && prisma generate"
+    "db:validate": "dotenv -e .env.development -- prisma validate",
+    "db:seed": "dotenv -e .env.development -- prisma db seed",
+    "db:reset": "dotenv -e .env.development -- prisma migrate reset && dotenv -e .env.development -- prisma db push && dotenv -e .env.development -- prisma generate"
   },
   "dependencies": {
     "@nuxtjs/tailwindcss": "^6.12.1",
@@ -37,6 +39,7 @@
     "prismjs": "^1.29.0"
   },
   "devDependencies": {
-    "@stagewise/toolbar-vue": "^0.4.8"
+    "@stagewise/toolbar-vue": "^0.4.8",
+    "dotenv-cli": "^8.0.0"
   }
 }

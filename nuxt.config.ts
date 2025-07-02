@@ -1,5 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  // 确保正确加载环境变量文件
+  runtimeConfig: {
+    // Private keys (only available on server-side)
+    jwtSecret: process.env.JWT_SECRET || 'your-secret-key',
+    databaseUrl: process.env.DATABASE_URL,
+    
+    // Public keys (exposed to client-side)
+    public: {
+      appName: process.env.NUXT_PUBLIC_APP_NAME || 'WebAI',
+      appUrl: process.env.NUXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    }
+  },
   compatibilityDate: '2024-04-03',
   devtools: { enabled: false },
   ssr: true,
@@ -31,6 +43,18 @@ export default defineNuxtConfig({
   nitro: {
     experimental: {
       wasm: false
+    },
+    serverAssets: [
+      {
+        baseName: 'prisma',
+        dir: './prisma'
+      }
+    ],
+    // 修复 Prisma 在 ES 模块中的问题
+    esbuild: {
+      options: {
+        target: 'node18'
+      }
     }
   },
   // 添加页面过渡效果
